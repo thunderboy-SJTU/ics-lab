@@ -1,0 +1,52 @@
+#Name :陈俊
+#Student ID:5140379064
+
+           .pos 0
+init:      irmovl Stack, %esp
+           irmovl Stack, %ebp
+           irmovl $4, %ebx
+           irmovl $3, %edx
+           pushl %edx
+           irmovl dest, %edx
+           pushl %edx
+           irmovl src, %edx
+           pushl %edx
+           
+           call copy_block
+           xorl %ebx, %ebx
+           halt
+
+           .align 4
+# Source block
+src:       .long 0x00a
+           .long 0x0b0
+           .long 0xc00
+# Destination block
+dest:      .long 0x111
+           .long 0x222
+           .long 0x333
+
+
+copy_block:pushl %ebp
+           rrmovl %esp, %ebp  
+           mrmovl 16(%ebp), %ecx
+           mrmovl 8(%ebp), %edx
+           mrmovl 12(%ebp), %edi
+           andl %ecx, %ecx
+           je end         
+loop:      mrmovl 0(%edx), %esi
+           addl %ebx, %edx
+           rmmovl %esi, 0(%edi)
+           addl %ebx, %edi
+           xorl %esi, %eax
+           irmovl $-1,%esi
+           addl %esi, %ecx
+           andl %ecx, %ecx
+           jne loop
+end:       rrmovl %ebp,%esp
+           popl %ebp
+           ret
+
+           .pos 0x100
+Stack:  
+           

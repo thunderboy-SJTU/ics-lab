@@ -1,0 +1,56 @@
+                      | #Name :陈俊
+                      | #Student ID:5140379064
+                      | 
+  0x000:              |            .pos 0
+  0x000: 30f400010000 | init:      irmovl Stack, %esp
+  0x006: 30f500010000 |            irmovl Stack, %ebp
+  0x00c: 30f203000000 |            irmovl $3, %edx
+  0x012: a02f         |            pushl %edx
+  0x014: 30f238000000 |            irmovl dest, %edx
+  0x01a: a02f         |            pushl %edx
+  0x01c: 30f22c000000 |            irmovl src, %edx
+  0x022: a02f         |            pushl %edx          
+  0x024: 8044000000   |            call copy_block
+  0x029: 00           |            halt
+                      | 
+  0x02c:              |            .align 4
+                      | # Source block
+  0x02c: 0a000000     | src:       .long 0x00a
+  0x030: b0000000     |            .long 0x0b0
+  0x034: 000c0000     |            .long 0xc00
+                      | # Destination block
+  0x038: 11010000     | dest:      .long 0x111
+  0x03c: 22020000     |            .long 0x222
+  0x040: 33030000     |            .long 0x333
+                      | 
+                      | 
+  0x044: a05f         | copy_block:pushl %ebp
+  0x046: 2045         |            rrmovl %esp, %ebp
+  0x048: a03f         |            pushl %ebx
+  0x04a: a06f         |            pushl %esi
+  0x04c: a07f         |            pushl %edi
+  0x04e: 30f304000000 |            irmovl $4, %ebx  
+  0x054: 501510000000 |            mrmovl 16(%ebp), %ecx
+  0x05a: 502508000000 |            mrmovl 8(%ebp), %edx
+  0x060: 50750c000000 |            mrmovl 12(%ebp), %edi
+  0x066: 6211         |            andl %ecx, %ecx
+  0x068: 738e000000   |            je end         
+  0x06d: 506200000000 | loop:      mrmovl 0(%edx), %esi
+  0x073: 6032         |            addl %ebx, %edx
+  0x075: 406700000000 |            rmmovl %esi, 0(%edi)
+  0x07b: 6037         |            addl %ebx, %edi
+  0x07d: 6360         |            xorl %esi, %eax
+  0x07f: 30f6ffffffff |            irmovl $-1,%esi
+  0x085: 6061         |            addl %esi, %ecx
+  0x087: 6211         |            andl %ecx, %ecx
+  0x089: 746d000000   |            jne loop
+  0x08e: b07f         | end:       popl %edi
+  0x090: b06f         |            popl %esi      
+  0x092: b03f         |            popl %ebx
+  0x094: 2054         |            rrmovl %ebp,%esp
+  0x096: b05f         |            popl %ebp
+  0x098: 90           |            ret
+                      | 
+  0x100:              |            .pos 0x100
+  0x100:              | Stack:  
+                      |            

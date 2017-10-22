@@ -1,0 +1,41 @@
+#Name :陈俊
+#Student ID:5140379064
+          
+           .pos 0
+init:      irmovl Stack, %esp
+           irmovl Stack, %ebp
+           irmovl ele1, %edx
+           pushl %edx
+           call rsum_list
+           halt
+
+           .align 4
+ele1:      .long 0x00a
+           .long ele2
+ele2:      .long 0x0b0
+           .long ele3
+ele3:      .long 0xc00
+           .long 0
+
+rsum_list: pushl %ebp
+           rrmovl %esp, %ebp  
+           pushl %ebx
+           irmovl $4, %ebx
+           mrmovl 8(%ebp),%edx
+           andl %edx, %edx
+           je end
+           mrmovl 0(%edx), %ecx
+           addl %ecx, %eax
+           addl %ebx, %edx
+           mrmovl 0(%edx), %edx
+           pushl %edx
+           call rsum_list          
+end:       popl %ebx
+           rrmovl %ebp, %esp
+           popl %ebp
+           ret
+          
+           .pos 0x100
+Stack:   
+
+           
